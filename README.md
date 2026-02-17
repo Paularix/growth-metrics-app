@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Factorial Growth Challenge - Metrics Dashboard
 
-## Getting Started
+This full-stack application was developed for the Factorial technical challenge. The project focuses on the persistence and visualization of business metrics using a modern and scalable stack.
 
-First, run the development server:
+**Live Demo:** [Insert your Vercel/Hosting Link here]
 
-```bash
+---
+
+## Approach and Decision Making
+
+1. **Tech Stack:** Built with **Next.js 15 (App Router)** and **TypeScript**. **Supabase** was chosen as the backend-as-a-service to provide a reliable PostgreSQL database with minimal configuration overhead.
+
+2. **Architecture:** The code follows a feature-based modular structure. UI components are decoupled from business logic, and the application includes a custom **i18n implementation** via hooks, making it ready for multi-language support (currently supporting English and Spanish).
+
+---
+
+## Dashboard Insights & Analysis
+
+The application is designed to transform raw data into actionable business perspectives:
+
+1. **Growth Lens & Perspective Filtering:** Users can toggle between **Growth, Marketing, and Revenue** views for segmented department analysis.
+2. **Trend Monitoring (Line Chart):** High-level overview of metric evolution to identify seasonality or anomalies.
+3. **Composition & Distribution (Pie Chart):** Visualizes the weight of each category (e.g., Organic vs. Paid acquisition).
+4. **Performance Deep-Dives (Bar Chart):** Focuses on volume analysis and period-over-period comparisons.
+5. **Data Portability (Import/Export):** Built-in CSV support for bulk data ingestion and external reporting.
+
+---
+
+## Showcase Feature: Interactive Drilldown
+
+Beyond the basic requirements, I implemented an **Interactive Drilldown System** across the Bar and Pie charts. This allows users to navigate through data hierarchies (e.g., breaking down a **Month** into specific **Weeks**), demonstrating advanced state management and deep data exploration.
+
+---
+
+## Setup and Installation
+
+### 1. Database Configuration
+Create a project in Supabase and execute the following scripts in the SQL Editor to initialize the schema:
+
+SQL
+```sql
+-- Create Categories table
+CREATE TABLE categories (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL UNIQUE,
+  description TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Create Metrics table
+CREATE TABLE metrics (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL,
+  value FLOAT8 NOT NULL,
+  category_id UUID REFERENCES categories(id),
+  category_name TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+2. Environment Variables
+Create a .env.local file in the root directory and add your Supabase credentials:
+
+Important: For security reasons, do not commit this file to your repository. It is already included in .gitignore.
+
+Bash
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+3. Execution
+Run the following commands to install dependencies and start the local development server:
+
+Bash
+# Install dependencies
+npm install
+
+# Run the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The application will be available at http://localhost:3000.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technical Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Frontend: Next.js 15 (App Router), TypeScript, Tailwind CSS.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Backend/Database: Supabase (PostgreSQL).
 
-## Learn More
+Visualization: Highcharts & Highcharts-React.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Internationalization: Custom i18n hook supporting EN/ES. (Current default is set via useTranslations hook config).
