@@ -1,0 +1,23 @@
+{
+  "add": "Add",
+  "performanceCenter": "Performance Center",
+  "growthMetricsDashboard": "Growth Metrics Dashboard",
+  "lineChart": "Line Chart",
+  "pieChart": "Pie Chart",
+  "salesPerformance": "Sales Performance",
+  "selectPerspective": "Select Perspective",
+  "timeSeriesRevenueAnalysis": "Time-series revenue analysis",
+  "metricEvolution": "Metric Evolution",
+  "metricDistribution": "Metric Distribution",
+  "addNewEntry": "Add New Entry",
+  "category": "Category",
+  "date": "Date",
+  "value": "Value",
+  "select": "Select...",
+  "adding": "Adding...",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "clickTheSlicesForADrilldown": "Click the slices for a drilldown.",
+  "invalidCsvFormat": "Invalid CSV format or empty file.",
+  "errorImportingData": "Failed to import CSV data. Please check the file structure."
+}
