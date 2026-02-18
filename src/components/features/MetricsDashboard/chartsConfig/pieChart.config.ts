@@ -1,6 +1,6 @@
 import { Options, SeriesPieOptions } from 'highcharts';
 
-import { PieChartSeries, DrilldownSeries } from '@/src/lib/utils/metricsUtils';
+import { PieChartSeries, DrilldownSeries } from '@/src/utils/metricsUtils';
 
 /**
  * Generates the configuration for the distribution Piechart.

@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { WidgetProps } from './Widget.types';
 
 const styles = {
-  container: 'flex flex-col bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden transition-all duration-300',
+  container: 'flex flex-col bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden transition-all',
   disabled: 'opacity-50',
   summary: 'flex items-center justify-between p-5 select-none transition-colors',
   summaryInteractive: 'cursor-pointer hover:bg-slate-50',
@@ -28,10 +28,8 @@ const styles = {
 };
 
 /**
- * A reusable wrapper for dashboard cards with support for
- * loading states, collapsibility, and disabled interactions.
- * * * @param props - Configuration properties for the widget container
- * @returns A responsive card component
+ * Reusable Widget component that serves as a flexible container for dashboard cards,
+ * supporting collapsible states, loading indicators, and disabled modes.
  */
 export const Widget = ({
   children,
@@ -46,18 +44,14 @@ export const Widget = ({
   className = '',
 }: WidgetProps) => {
   const [isExpandedUser, setIsExpandedUser] = useState(isExpanded);
-
   const currentExpanded = isDisabled ? false : (!isCollapsible ? true : isExpandedUser);
 
   const handleToggle = () => {
-    if (!isDisabled && isCollapsible) {
-      setIsExpandedUser(!currentExpanded);
-    }
+    if (!isDisabled && isCollapsible) setIsExpandedUser(!currentExpanded);
   };
 
   return (
     <div className={`${styles.container} ${className} ${isDisabled ? styles.disabled : ''}`}>
-
       {(title || description || icon) && (
         <div
           className={`${styles.summary} ${isCollapsible && !isDisabled ? styles.summaryInteractive : ''}`}
@@ -69,19 +63,14 @@ export const Widget = ({
               <div className={styles.iconWrapper}>
                 {typeof icon === 'string' ? (
                   <img src={icon} alt='widget icon' className={styles.iconImg} />
-                ) : (
-                  icon
-                )}
+                ) : icon}
               </div>
             )}
             <div className={styles.titleWrapper}>
               {title && <h3 className={styles.title}>{title}</h3>}
-              {currentExpanded && description && (
-                <p className={styles.descriptionText}>{description}</p>
-              )}
+              {currentExpanded && description && <p className={styles.descriptionText}>{description}</p>}
             </div>
           </div>
-
           {isCollapsible && (
             <div className={`${styles.arrowWrapper} ${currentExpanded ? 'rotate-180' : 'rotate-0'}`}>
               <svg className={styles.arrowIcon} fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -91,21 +80,15 @@ export const Widget = ({
           )}
         </div>
       )}
-
       <div className={`${styles.bodyGrid} ${currentExpanded ? styles.bodyVisible : styles.bodyHidden}`}>
         <div className={styles.detailsWrapper}>
-          <div
-            className={styles.details}
-            style={{ height: currentExpanded ? height : 0 }}
-          >
+          <div className={styles.details} style={{ height: currentExpanded ? height : 0 }}>
             {isLoading ? (
               <div className={styles.loadingWrapper}>
                 <div className={styles.spinner} />
               </div>
             ) : (
-              <div className={styles.content}>
-                {children}
-              </div>
+              <div className={styles.content}>{children}</div>
             )}
           </div>
         </div>

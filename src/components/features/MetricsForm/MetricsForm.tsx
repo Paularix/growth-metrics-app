@@ -4,8 +4,8 @@ import React, { useState, useImperativeHandle, forwardRef, useEffect, useMemo } 
 
 import { MetricsFormHandle, MetricsFormProps } from './MetricsForm.types';
 
-import { METRIC_OPTIONS, MetricName } from '@/src/lib/constants/metrics';
-import { metricsService } from '@/src/lib/services/metricsService';
+import { METRIC_OPTIONS, MetricName } from '@/src/constants/metrics';
+import { metricsService } from '@/src/services/metricsService';
 import { useMetricsData } from '@/src/hooks/useMetricsData';
 import { useTranslations } from '@/src/hooks/useTranslations';
 
@@ -17,9 +17,8 @@ const styles = {
 };
 
 /**
- * Enhanced form component for creating and categorizing business metrics.
- * Utilizes forwardRef to allow parent components to trigger submission.
- * Features dynamic relational filtering for categories based on the selected metric type.
+ * Handles new metric entries with dynamic category filtering
+ * based on selected metric types and supports imperative submission.
  */
 export const MetricsForm = forwardRef<MetricsFormHandle, MetricsFormProps>(({
   onApply,
@@ -61,7 +60,6 @@ export const MetricsForm = forwardRef<MetricsFormHandle, MetricsFormProps>(({
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!isValid) return;
-
     setLoading(true);
     try {
       await metricsService.create({
@@ -86,23 +84,21 @@ export const MetricsForm = forwardRef<MetricsFormHandle, MetricsFormProps>(({
     <form onSubmit={handleSubmit} className={styles.container}>
       <div className='space-y-5'>
         <div>
-          <label className={styles.label}>{t.select}</label>
+          <label className={styles.label}>{t.selectMetric || t.select}</label>
           <select className={styles.input} value={name} onChange={(e) => setName(e.target.value as MetricName)} required>
             <option disabled value=''>{t.select}</option>
             {METRIC_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
           </select>
         </div>
-
         <div>
           <label className={styles.label}>{t.category}</label>
           <select className={styles.input} value={category} onChange={handleCategoryChange} disabled={!name} required>
-            <option value='General'>General / Other</option>
+            <option value='General'>{t.generalCategory || 'General / Other'}</option>
             {filteredCategories.map((cat) => (
               <option key={cat.id} value={cat.name}>{cat.name}</option>
             ))}
           </select>
         </div>
-
         <div className={styles.grid}>
           <div>
             <label className={styles.label}>{t.date}</label>
@@ -110,7 +106,8 @@ export const MetricsForm = forwardRef<MetricsFormHandle, MetricsFormProps>(({
           </div>
           <div>
             <label className={styles.label}>{t.value}</label>
-            <input className={styles.input} type='number' value={value} onChange={(e) => setValue(e.target.value)} placeholder='0.00' required />
+            <input className={styles.input} type='number' value={value}
+              onChange={(e) => setValue(e.target.value)} placeholder='0.00' required />
           </div>
         </div>
       </div>
