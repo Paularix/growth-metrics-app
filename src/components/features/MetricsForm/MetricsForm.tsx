@@ -39,7 +39,13 @@ export const MetricsForm = forwardRef<MetricsFormHandle, MetricsFormProps>(({
     return allCategories.filter((cat) => cat.metric_type === name);
   }, [name, allCategories]);
 
-  const isValid = name !== '' && value !== '' && Number(value) > 0;
+  const isValid = useMemo(() => {
+    return name !== '' && value.trim() !== '' && !isNaN(Number(value)) && Number(value) > 0;
+  }, [name, value]);
+
+  useEffect(() => {
+    onValidationChange?.(false);
+  }, [onValidationChange]);
 
   useEffect(() => {
     onValidationChange?.(isValid);
@@ -59,7 +65,7 @@ export const MetricsForm = forwardRef<MetricsFormHandle, MetricsFormProps>(({
 
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (!isValid) return;
+    if (!isValid || loading) return;
     setLoading(true);
     try {
       await metricsService.create({
@@ -72,7 +78,7 @@ export const MetricsForm = forwardRef<MetricsFormHandle, MetricsFormProps>(({
       await refetch();
       onApply?.();
     } catch (error) {
-      console.error(error);
+      console.error('Error creating metric:', error);
     } finally {
       setLoading(false);
     }
@@ -84,16 +90,30 @@ export const MetricsForm = forwardRef<MetricsFormHandle, MetricsFormProps>(({
     <form onSubmit={handleSubmit} className={styles.container}>
       <div className='space-y-5'>
         <div>
-          <label className={styles.label}>{t.selectMetric || t.select}</label>
-          <select className={styles.input} value={name} onChange={(e) => setName(e.target.value as MetricName)} required>
-            <option disabled value=''>{t.select}</option>
-            {METRIC_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+          <label className={styles.label}>{t.option}</label>
+          <select
+            className={styles.input}
+            value={name}
+            onChange={(e) => setName(e.target.value as MetricName)}
+            required
+          >
+            <option value='' disabled>{t.option}</option>
+            {METRIC_OPTIONS.map((opt) => (
+              <option key={opt} value={opt}>{opt}</option>
+            ))}
           </select>
         </div>
+
         <div>
           <label className={styles.label}>{t.category}</label>
-          <select className={styles.input} value={category} onChange={handleCategoryChange} disabled={!name} required>
-            <option value='General'>{t.generalCategory || 'General / Other'}</option>
+          <select
+            className={styles.input}
+            value={category}
+            onChange={handleCategoryChange}
+            disabled={!name}
+            required
+          >
+            <option value='General'>{t.generalCategory}</option>
             {filteredCategories.map((cat) => (
               <option key={cat.id} value={cat.name}>{cat.name}</option>
             ))}
@@ -106,12 +126,19 @@ export const MetricsForm = forwardRef<MetricsFormHandle, MetricsFormProps>(({
           </div>
           <div>
             <label className={styles.label}>{t.value}</label>
-            <input className={styles.input} type='number' value={value}
-              onChange={(e) => setValue(e.target.value)} placeholder='0.00' required />
+            <input
+              className={styles.input}
+              type='number'
+              step='any'
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder='0.00'
+              required
+            />
           </div>
         </div>
       </div>
-      <button type='submit' className='hidden' disabled={loading} />
+      <button type='submit' className='hidden' disabled={!isValid || loading} />
     </form>
   );
 });
