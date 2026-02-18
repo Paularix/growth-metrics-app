@@ -24,19 +24,24 @@ export default function MetricsDashboard() {
   const [activeOption, setActiveOption] = useState('all');
   const [isHighchartsReady, setIsHighchartsReady] = useState(false);
   const [isBarDrilled, setIsBarDrilled] = useState(false);
-  const { isLoading, rawMetrics } = useMetricsData();
+
+  const { isLoading, rawMetrics, isError } = useMetricsData();
   const { t } = useTranslations();
 
   useEffect(() => {
     const initModules = async () => {
       if (typeof window !== 'undefined') {
         const Drilldown = (await import('highcharts/modules/drilldown')).default;
-        if (typeof Drilldown === 'function') (Drilldown as (hc: typeof Highcharts) => void)(Highcharts);
+        if (typeof Drilldown === 'function') {
+          (Drilldown as (hc: typeof Highcharts) => void)(Highcharts);
+        }
         setIsHighchartsReady(true);
       }
     };
     initModules();
   }, []);
+
+  const hasNoMetrics = !isLoading && rawMetrics.length === 0;
 
   const { lineSeries, pieSeries, drilldownSeries } = useMemo(() =>
     getMainChartsData(rawMetrics, activeOption, FEATURES_IN_PROD), [rawMetrics, activeOption]);
@@ -49,7 +54,10 @@ export default function MetricsDashboard() {
       ...baseConfig,
       chart: {
         ...baseConfig.chart,
-        events: { drilldown: () => setIsBarDrilled(true), drillup: () => setIsBarDrilled(false) }
+        events: {
+          drilldown: () => setIsBarDrilled(true),
+          drillup: () => setIsBarDrilled(false)
+        }
       }
     };
   }, [salesBarData]);
@@ -70,22 +78,47 @@ export default function MetricsDashboard() {
         subtitle={t.selectPerspective}
         options={FEATURES_IN_PROD.map(f => ({ id: f.id, label: f.name }))}
       />
+
       <div className='grid grid-cols-12 gap-8'>
-        <Widget title={t.trendAnalysis} className='col-span-12 lg:col-span-8' isLoading={isLoading} isExpanded>
+        <Widget
+          title={t.trendAnalysis}
+          className='col-span-12 lg:col-span-8'
+          isLoading={isLoading}
+          isEmpty={hasNoMetrics}
+          isExpanded
+        >
           <HighchartsReact highcharts={Highcharts} options={getLineChartConfig(lineSeries)} />
         </Widget>
-        <Widget title={t.metricsDistribution} className='col-span-12 lg:col-span-4' isLoading={isLoading} isExpanded>
+
+        <Widget
+          title={t.metricsDistribution}
+          className='col-span-12 lg:col-span-4'
+          isLoading={isLoading}
+          isEmpty={hasNoMetrics}
+          isExpanded
+        >
           <HighchartsReact highcharts={Highcharts} options={getPieChartConfig(pieSeries, drilldownSeries)} />
         </Widget>
       </div>
-      <Widget title={t.salesPerformance} isCollapsible isExpanded={false} isLoading={isLoading}>
+
+      <Widget
+        title={t.salesPerformance}
+        isCollapsible
+        isExpanded={false}
+        isLoading={isLoading}
+        isEmpty={hasNoMetrics}
+      >
         <div className='w-full pb-4'>
           <HighchartsReact
             highcharts={Highcharts}
             options={barOptions}
             allowChartUpdate={!isBarDrilled}
             callback={(chart: Highcharts.Chart) => {
-              if (!isBarDrilled) setTimeout(() => chart.reflow(), 150);
+              if (!isBarDrilled && chart?.container) {
+                setTimeout(() => {
+                  if (chart.container) chart.reflow();
+                }, 150);
+              }
             }}
           />
         </div>
