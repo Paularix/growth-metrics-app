@@ -1,4 +1,9 @@
-import { MetricName } from '@/src/lib/constants/metrics';
+import { MetricName } from '@/src/constants/metrics';
+
+/**
+ * Metrics type definitions including core Metric interfaces, database row structures,
+ * and relational category definitions for the application.
+ */
 
 export interface Metric {
   id?: number | string;
@@ -8,23 +13,16 @@ export interface Metric {
   category_id: number | null;
   created_at: string;
 }
-/**
- * Interface representing the database row structure for Metrics with joined Categories.
- */
+
 export interface MetricRow {
   id: number;
   name: string;
   value: number;
   created_at: string;
   category_id: number | null;
-  metric_categories: {
-    name: string;
-  } | null;
+  metric_categories: { name: string } | null;
 }
 
-/**
- * Clean interface for Category definitions used across the app.
- */
 export interface CategoryDefinition {
   id: number;
   name: string;
