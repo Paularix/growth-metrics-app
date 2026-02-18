@@ -2,7 +2,7 @@
 
 This full-stack application was developed for the Factorial technical challenge. The project focuses on the persistence and visualization of business metrics using a modern and scalable stack.
 
-**Live Demo:** [Insert your Vercel/Hosting Link here]
+**Live Demo:** https://growth-metrics-app.vercel.app/
 
 ---
 
