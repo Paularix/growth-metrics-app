@@ -22,7 +22,8 @@ The application is designed to transform raw data into actionable business persp
 2. **Trend Monitoring (Line Chart):** High-level overview of metric evolution to identify seasonality or anomalies.
 3. **Composition & Distribution (Pie Chart):** Visualizes the weight of each category (e.g., Organic vs. Paid acquisition).
 4. **Performance Deep-Dives (Bar Chart):** Focuses on volume analysis and period-over-period comparisons.
-5. **Data Portability (Import/Export):** Built-in CSV support for bulk data ingestion and external reporting.
+5. **Empty States:** Integrated professional "No Data" states with technical guidance to handle empty database scenarios gracefully.
+6. **Data Portability (Export):** Built-in CSV support for external reporting.
 
 ---
 

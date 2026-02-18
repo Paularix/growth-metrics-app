@@ -1,3 +1,7 @@
+/**
+ * Metrics configuration constants defining available metric types and
+ * feature-flagged perspectives for the dashboard visualization.
+ */
 export const METRIC_OPTIONS = [
   'Users',
   'Engagement',

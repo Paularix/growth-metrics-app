@@ -1,6 +1,6 @@
 import { Options, SeriesAreaOptions } from 'highcharts';
 
-import { LineChartData } from '@/src/lib/utils/metricsUtils';
+import { LineChartData } from '@/src/utils/metricsUtils';
 
 /**
  * Generates the configuration for the Line Chart.

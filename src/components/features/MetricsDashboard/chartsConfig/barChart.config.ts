@@ -1,6 +1,6 @@
 import { Options, SeriesColumnOptions, SeriesOptionsType } from 'highcharts';
 
-import { BarChartPoint, BarDrilldownSeries } from '../../../../lib/utils/metricsUtils';
+import { BarChartPoint, BarDrilldownSeries } from '../../../../utils/metricsUtils';
 
 /**
  * Generates the configuration for the Sales Performance column chart with Drilldown support.

@@ -3,19 +3,22 @@
 import { MetricsSelectorBarProps } from './MetricsSelectorBar.types';
 
 const styles = {
-  container: `flex flex-wrap justify-between items-center bg-white p-4 
-    border border-slate-200 rounded-xl shadow-sm gap-4`,
+  container: 'flex flex-wrap justify-between items-center bg-white p-4 border border-slate-200 rounded-xl shadow-sm gap-4',
   infoWrapper: 'flex items-center gap-2 px-1',
   iconBox: 'p-1.5 bg-slate-50 rounded-lg border border-slate-100',
   iconText: 'text-base',
   title: 'text-[14px] font-bold text-slate-800 uppercase tracking-tight leading-none',
   subtitle: 'text-[12px] text-slate-400 font-medium tracking-wide',
   buttonGroup: 'flex bg-slate-100/80 p-1 rounded-lg gap-1 border border-slate-100',
-  buttonBase: `px-3 py-1.5 text-[12px] font-bold rounded-md transition-all duration-200 
-    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-200`,
+  buttonBase: 'px-3 py-1.5 text-[12px] font-bold rounded-md transition-all duration-200 focus-visible:outline-none',
   buttonActive: 'bg-white text-[#ff585d] shadow-sm border border-slate-100 scale-[1.02]',
   buttonInactive: 'text-slate-400 hover:text-slate-600 hover:bg-slate-200/50'
 };
+
+/**
+ * Provides a navigation interface for switching between different
+ * data perspectives, featuring dynamic styling for active states.
+ */
 
 export default function MetricsSelectorBar({
   activeId,

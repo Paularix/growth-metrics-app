@@ -1,13 +1,11 @@
 import { ReactNode } from 'react';
 
-/**
- * Interface to ensure child components (Charts) correctly receive
- * the properties injected or managed by the Widget container.
- */
 export interface HighchartsComponentProps {
+  /** * Specific options for Highcharts to ensure proper scaling within the widget.
+   */
   options?: {
     chart?: {
-      /** Highcharts uses 'height' as its primary sizing property */
+      /** Custom height for the chart container, usually managed by the parent widget */
       height?: number | string;
     };
     [key: string]: unknown;
@@ -15,24 +13,28 @@ export interface HighchartsComponentProps {
 }
 
 export interface WidgetProps {
-  /** Internal content of the widget (Charts, tables, etc.) */
+  /** Main content to be rendered inside the widget (e.g., charts, tables, forms) */
   children: ReactNode;
-  /** Additional Tailwind CSS classes for custom styling */
+  /** Additional CSS classes for layout adjustments or custom styles */
   className?: string;
-  /** Descriptive text displayed below the main title */
+  /** Explanatory text shown under the title to provide context */
   description?: string;
-  /** Fixed height for the content area (e.g., 400, '400px', 'auto') */
+  /** * Enforced height for the widget's inner content area
+   * @example 400, '400px', '70vh'
+   */
   height?: string | number;
-  /** Icon or image URL displayed in the widget header */
+  /** Graphical element or image URL rendered in the header next to the title */
   icon?: ReactNode | string;
-  /** If true, enables the collapse/expand functionality */
+  /** Whether the user can toggle the widget's visibility */
   isCollapsible?: boolean;
-  /** If true, the widget appears grayed out and prevents user interaction */
+  /** If true, visual opacity is reduced and all interactions are blocked */
   isDisabled?: boolean;
-  /** Initial expansion state of the widget */
+  /** Sets the starting state for collapsible widgets */
   isExpanded?: boolean;
-  /** Displays a loading spinner over the content area */
+  /** Replaces the content with a centered loading spinner while data is being fetched */
   isLoading?: boolean;
-  /** Primary heading of the widget */
+  /** If true, shows a message indicating no data is available for the current filters */
+  isEmpty?: boolean;
+  /** The main title displayed in the widget's header */
   title?: string;
 }

@@ -1,50 +1,52 @@
 'use client';
 
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState, useEffect, useRef } from 'react';
 
 import { CategoryDefinition, Metric } from '../types/metrics';
-import { metricsService } from '../lib/services/metricsService';
+import { metricsService } from '../services/metricsService';
 
 /**
- * Custom hook for managing the lifecycle of dashboard metrics and category definitions.
- * Handles initial data fetching, state management for loading indicators,
- * and implements a real-time polling mechanism to keep data synchronized with the server.
- * * @returns {Object} An object containing:
- * - rawMetrics: Array of processed metric records.
- * - allCategories: Array of relational category definitions for form filtering.
- * - isLoading: Boolean flag indicating the initial fetch status.
- * - refetch: Function to manually trigger a data refresh.
+ * Hook that manages metrics and categories data, providing safe polling
+ * and exposing error states for robust UI handling.
  */
+
 export function useMetricsData() {
   const [rawMetrics, setRawMetrics] = useState<Metric[]>([]);
   const [allCategories, setAllCategories] = useState<CategoryDefinition[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isError, setIsError] = useState<boolean>(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const loadData = useCallback(async () => {
     try {
-      const [metricsData, categoriesData] = await Promise.all([
+      const [metrics, categories] = await Promise.all([
         metricsService.getAll(),
         metricsService.getCategories()
       ]);
-      setRawMetrics(metricsData);
-      setAllCategories(categoriesData);
+      setRawMetrics(metrics);
+      setAllCategories(categories);
+      setIsError(false);
     } catch (error) {
       console.error('Fetch error:', error);
+      setIsError(true);
     } finally {
       setIsLoading(false);
+      timeoutRef.current = setTimeout(loadData, 5000);
     }
   }, []);
 
   useEffect(() => {
     loadData();
-    const interval = setInterval(loadData, 5000);
-    return () => clearInterval(interval);
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, [loadData]);
 
   return {
     rawMetrics,
     allCategories,
     isLoading,
+    isError,
     refetch: loadData
   };
 }

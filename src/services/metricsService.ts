@@ -1,29 +1,20 @@
-import { supabase } from '../supabase/client';
-import { CategoryDefinition, Metric, MetricRow } from '../../types/metrics';
+
+import { supabase } from '../lib/supabase/client';
+import { CategoryDefinition, Metric, MetricRow } from '../types/metrics';
 import { MetricName } from '../constants/metrics';
 
-
+/**
+ * Provides methods to interact with Supabase for fetching metrics,
+ * creating new records, and retrieving category definitions.
+ */
 export const metricsService = {
-  /**
-   * Fetches all metrics and maps the relational 'metric_categories' name to the 'category' field.
-   */
   async getAll(): Promise<Metric[]> {
     const { data, error } = await supabase
       .from('metrics')
-      .select(`
-        id,
-        name,
-        value,
-        created_at,
-        category_id,
-        metric_categories (
-          name
-        )
-      `)
+      .select('id, name, value, created_at, category_id, metric_categories(name)')
       .order('created_at', { ascending: true });
 
     if (error) throw error;
-
     const rows = (data as unknown as MetricRow[]) || [];
 
     return rows.map((m): Metric => ({
