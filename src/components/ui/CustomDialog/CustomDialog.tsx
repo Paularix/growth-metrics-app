@@ -13,8 +13,8 @@ const styles = {
   title: 'text-xl font-bold text-slate-800',
   body: 'p-6 py-2',
   actions: 'p-4 px-6 flex justify-end gap-3',
-  btnCancel: 'px-4 py-2 text-sm font-semibold text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-xl',
-  btnConfirm: 'px-6 py-2 text-sm font-bold text-white bg-[#ff585d] hover:bg-[#ff4046] rounded-xl shadow-md active:scale-95',
+  btnCancel: 'px-4 py-2 text-sm font-semibold text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed',
+  btnConfirm: 'px-6 py-2 text-sm font-bold text-white bg-[#ff585d] hover:bg-[#ff4046] rounded-xl shadow-md active:scale-95 transition-all disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none disabled:active:scale-100 disabled:cursor-not-allowed',
 };
 
 /**
@@ -49,7 +49,11 @@ export const CustomDialog = ({
         <div className={styles.header}>
           <h2 className={styles.title}>{title}</h2>
           {!closeDisabled && onClose && (
-            <button onClick={onClose} className='text-slate-400 hover:text-slate-600 p-1 transition-colors text-lg'>
+            <button
+              onClick={onClose}
+              className='text-slate-400 hover:text-slate-600 p-1 transition-colors text-lg disabled:opacity-30'
+              disabled={closeDisabled}
+            >
               ✕
             </button>
           )}
@@ -63,7 +67,11 @@ export const CustomDialog = ({
               </button>
             )}
             {onConfirm && (
-              <button disabled={confirmDisabled} onClick={onConfirm} className={styles.btnConfirm}>
+              <button
+                disabled={confirmDisabled}
+                onClick={onConfirm}
+                className={styles.btnConfirm}
+              >
                 {labels.confirm}
               </button>
             )}
