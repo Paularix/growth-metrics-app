@@ -33,6 +33,8 @@ export interface WidgetProps {
   isExpanded?: boolean;
   /** Replaces the content with a centered loading spinner while data is being fetched */
   isLoading?: boolean;
+  /** If true, shows a message indicating no data is available for the current filters */
+  isEmpty?: boolean;
   /** The main title displayed in the widget's header */
   title?: string;
 }
