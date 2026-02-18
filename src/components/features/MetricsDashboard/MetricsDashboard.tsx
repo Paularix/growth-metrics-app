@@ -23,9 +23,14 @@ import { getMainChartsData, getSalesBarData } from '@/src/utils/metricsUtils';
 export default function MetricsDashboard() {
   const [activeOption, setActiveOption] = useState('all');
   const [isHighchartsReady, setIsHighchartsReady] = useState(false);
-  const [isBarDrilled, setIsBarDrilled] = useState(false);
 
-  const { isLoading, rawMetrics, isError } = useMetricsData();
+  const [isBarDrilled, setIsBarDrilled] = useState(false);
+  const [isPieDrilled, setIsPieDrilled] = useState(false);
+
+  const { isLoading, rawMetrics } = useMetricsData({
+    enabled: !isBarDrilled && !isPieDrilled
+  });
+
   const { t } = useTranslations();
 
   useEffect(() => {
@@ -47,6 +52,15 @@ export default function MetricsDashboard() {
     getMainChartsData(rawMetrics, activeOption, FEATURES_IN_PROD), [rawMetrics, activeOption]);
 
   const salesBarData = useMemo(() => getSalesBarData(rawMetrics, 'month'), [rawMetrics]);
+
+  const pieOptions = useMemo(() =>
+    getPieChartConfig(
+      pieSeries,
+      drilldownSeries,
+      () => setIsPieDrilled(true),
+      () => setIsPieDrilled(false)
+    ),
+  [pieSeries, drilldownSeries]);
 
   const barOptions = useMemo(() => {
     const baseConfig = getBarChartConfig(salesBarData.data, salesBarData.drilldownSeries);
@@ -97,7 +111,11 @@ export default function MetricsDashboard() {
           isEmpty={hasNoMetrics}
           isExpanded
         >
-          <HighchartsReact highcharts={Highcharts} options={getPieChartConfig(pieSeries, drilldownSeries)} />
+          <HighchartsReact
+            highcharts={Highcharts}
+            options={pieOptions}
+            allowChartUpdate={!isPieDrilled}
+          />
         </Widget>
       </div>
 

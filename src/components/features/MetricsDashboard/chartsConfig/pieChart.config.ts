@@ -1,4 +1,4 @@
-import { Options, SeriesPieOptions } from 'highcharts';
+import { Options, SeriesPieOptions, SeriesOptionsType } from 'highcharts';
 
 import { PieChartSeries, DrilldownSeries } from '@/src/utils/metricsUtils';
 
@@ -10,12 +10,22 @@ import { PieChartSeries, DrilldownSeries } from '@/src/utils/metricsUtils';
  */
 export const getPieChartConfig = (
   seriesData: PieChartSeries[],
-  drilldownSeriesData: DrilldownSeries[]
+  drilldownSeriesData: DrilldownSeries[],
+  onDrilldown?: () => void,
+  onDrillup?: () => void
 ): Options => ({
   chart: {
     type: 'pie',
     height: 400,
-    style: { fontFamily: 'inherit' }
+    style: { fontFamily: 'inherit' },
+    events: {
+      drilldown: function() {
+        if (onDrilldown) onDrilldown();
+      },
+      drillup: function() {
+        if (onDrillup) onDrillup();
+      }
+    }
   },
   title: { text: '' },
   credits: { enabled: false },
@@ -27,6 +37,11 @@ export const getPieChartConfig = (
       showInLegend: true,
       innerSize: '60%',
       borderWidth: 0,
+      point: {
+        events: {
+          legendItemClick: function () { return true; }
+        }
+      }
     }
   },
   series: seriesData.map((s): SeriesPieOptions => ({
@@ -54,10 +69,11 @@ export const getPieChartConfig = (
       },
       showFullPath: true
     },
-    series: drilldownSeriesData.map((s): SeriesPieOptions => ({
+    series: drilldownSeriesData.map((s): SeriesOptionsType => ({
       type: 'pie',
       id: s.id,
       name: s.name,
+      innerSize: '60%',
       data: s.data.map(d => ({
         name: d[0],
         y: d[1]

@@ -28,3 +28,7 @@ export interface CategoryDefinition {
   name: string;
   metric_type: MetricName;
 }
+
+export interface UseMetricsOptions {
+  enabled?: boolean;
+}
