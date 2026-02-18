@@ -3,17 +3,11 @@
 import { useCallback, useState, useEffect } from 'react';
 
 import { CategoryDefinition, Metric } from '../types/metrics';
-import { metricsService } from '../lib/services/metricsService';
+import { metricsService } from '../services/metricsService';
 
 /**
- * Custom hook for managing the lifecycle of dashboard metrics and category definitions.
- * Handles initial data fetching, state management for loading indicators,
- * and implements a real-time polling mechanism to keep data synchronized with the server.
- * * @returns {Object} An object containing:
- * - rawMetrics: Array of processed metric records.
- * - allCategories: Array of relational category definitions for form filtering.
- * - isLoading: Boolean flag indicating the initial fetch status.
- * - refetch: Function to manually trigger a data refresh.
+ * Hook that manages the fetching and synchronization of metrics and categories,
+ * providing real-time updates via polling and exposing data states for the dashboard.
  */
 export function useMetricsData() {
   const [rawMetrics, setRawMetrics] = useState<Metric[]>([]);

@@ -11,21 +11,14 @@ import MetricsDashboard from '@/src/components/features/MetricsDashboard/Metrics
 import { CustomDialog } from '@/src/components/ui/CustomDialog/CustomDialog';
 import { MetricsForm } from '@/src/components/features/MetricsForm/MetricsForm';
 import { Button } from '@/src/components/ui/Button/Button';
-import { csvService } from '@/src/lib/services/csvService';
+import { csvService } from '@/src/services/csvService';
 import { MetricsFormHandle } from '@/src/components/features/MetricsForm/MetricsForm.types';
 
-/**
- * Main application page.
- * Internationalization is fully configured via useTranslations hook (supporting 'en'/'es').
- * Language switching is prepared for future implementation in global settings.
- */
 export default function HomePage() {
   const { t } = useTranslations();
   const { rawMetrics, refetch } = useMetricsData();
-
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
-
   const formRef = useRef<MetricsFormHandle>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -35,20 +28,17 @@ export default function HomePage() {
   const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     try {
       const text = await file.text();
       const data = csvService.parseCsv(text);
-
       if (data.length > 0) {
         await refetch();
-        // Opcional: podrías añadir un toast de éxito aquí
       } else {
-        alert(t.invalidCsvFormat || 'Invalid CSV format');
+        alert(t.invalidCsvFormat);
       }
     } catch (error) {
-      console.error('Error importing CSV:', error);
-      alert(t.errorImportingData || 'Failed to import CSV data. Please check the file format.');
+      console.error('Import error:', error);
+      alert(t.errorImportingData);
     } finally {
       e.target.value = '';
     }
@@ -57,7 +47,6 @@ export default function HomePage() {
   return (
     <main className={styles.main}>
       <div className={styles.container}>
-
         <header className='flex justify-between items-end mb-10'>
           <div className='pb-1'>
             <h1 className={styles.title}>
@@ -66,7 +55,6 @@ export default function HomePage() {
             </h1>
           </div>
           <div className='flex items-center gap-3 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/50 shadow-sm'>
-
             <input
               type='file'
               accept='.csv'
@@ -74,7 +62,6 @@ export default function HomePage() {
               ref={fileInputRef}
               onChange={handleImport}
             />
-
             <div className='flex items-center gap-1 p-0.5'>
               <Button
                 variant='outline'
@@ -82,7 +69,7 @@ export default function HomePage() {
                 icon={<Download size={14} />}
                 onClick={handleExport}
                 className='border-none shadow-none hover:bg-slate-50 text-slate-500'
-                title='Export CSV'
+                title={t.exportCsv || 'Export CSV'}
               />
               <div className='h-4 w-px bg-slate-100' />
               <Button
@@ -91,10 +78,9 @@ export default function HomePage() {
                 icon={<Upload size={14} />}
                 onClick={() => fileInputRef.current?.click()}
                 className='border-none shadow-none hover:bg-slate-50 text-slate-500'
-                title='Import CSV'
+                title={t.importCsv || 'Import CSV'}
               />
             </div>
-
             <Button
               variant='primary'
               size='md'
