@@ -7,12 +7,10 @@
   "clickTheSlicesForADrilldown": "Click the slices for a drilldown.",
   "confirm": "Confirm",
   "date": "Date",
-  "errorImportingData": "Failed to import CSV data.",
   "exportCsv": "Export CSV",
   "generalCategory": "General / Other",
   "growthLens": "Growth Lens",
   "growthMetricsDashboard": "Growth Metrics Dashboard",
-  "importCsv": "Import CSV",
   "invalidCsvFormat": "Invalid CSV format or empty file.",
   "loadingDashboard": "Loading Dashboard...",
   "metricDistribution": "Metric Distribution",
@@ -22,9 +20,10 @@
   "pieChart": "Distribution Analysis",
   "salesPerformance": "Sales Performance",
   "select": "Select...",
-  "selectMetric": "Select Metric",
   "selectPerspective": "Select Perspective",
   "timeSeriesRevenueAnalysis": "Time-series revenue analysis",
   "trendAnalysis": "Trend Analysis",
-  "value": "Value"
+  "value": "Value",
+  "noDataPointsDetected": "No Data Points Detected",
+  "connectToSupabaseOrInitializeYourDatasetToBeginVisualizingGrowthMetrics": "Connect to Supabase or initialize your dataset to begin visualizing growth metrics."
 }

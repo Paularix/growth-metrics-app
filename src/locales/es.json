@@ -7,12 +7,10 @@
   "clickTheSlicesForADrilldown": "Haz clic en las secciones para ver el detalle.",
   "confirm": "Confirmar",
   "date": "Fecha",
-  "errorImportingData": "Error al importar los datos del CSV.",
   "exportCsv": "Exportar CSV",
   "generalCategory": "General / Otros",
   "growthLens": "Lente de Crecimiento",
   "growthMetricsDashboard": "Panel de Métricas",
-  "importCsv": "Importar CSV",
   "invalidCsvFormat": "Formato CSV inválido o archivo vacío.",
   "loadingDashboard": "Cargando Panel...",
   "metricDistribution": "Distribución de Métricas",
@@ -22,9 +20,10 @@
   "pieChart": "Análisis de Distribución",
   "salesPerformance": "Rendimiento de Ventas",
   "select": "Seleccionar...",
-  "selectMetric": "Seleccionar Métrica",
   "selectPerspective": "Seleccionar Perspectiva",
   "timeSeriesRevenueAnalysis": "Análisis histórico de ingresos",
   "trendAnalysis": "Análisis de Tendencias",
-  "value": "Valor"
+  "value": "Valor",
+  "noDataPointsDetected": "No se detectaron puntos de datos",
+  "connectToSupabaseOrInitializeYourDatasetToBeginVisualizingGrowthMetrics": "Conecta con Supabase o inicializa tu conjunto de datos para comenzar a visualizar métricas de crecimiento."
 }
